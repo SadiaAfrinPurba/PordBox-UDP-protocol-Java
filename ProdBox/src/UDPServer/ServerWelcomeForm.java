@@ -3,33 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UDPClient;
+package UDPServer;
 
-import UDPServer.Server;
+import UDPClient.*;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author afrin
  */
-public class LoginForm extends javax.swing.JFrame {
+public class ServerWelcomeForm extends javax.swing.JFrame {
 
     /**
      * Creates new form LoginForm
      */
-    
-    public static String username, password,command;
-    
-    public LoginForm() {
+    public ServerWelcomeForm() {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2 , dim.height / 2 - this.getSize().height / 2);
-//        this.setSize(262,480);
-    }   
+        
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -44,10 +40,11 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        TFusername = new javax.swing.JTextField();
-        TFpassword = new javax.swing.JPasswordField();
+        jLabel7 = new javax.swing.JLabel();
+        LabelStatus = new javax.swing.JLabel();
+        LabelConnected = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        BtnLogin = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -62,21 +59,45 @@ public class LoginForm extends javax.swing.JFrame {
         kGradientPanel1.add(jLabel6);
         jLabel6.setBounds(30, 80, 180, 40);
 
+        jLabel3.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(170, 0, 255));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/username.png"))); // NOI18N
+        jLabel3.setText("Status");
         kGradientPanel1.add(jLabel3);
         jLabel3.setBounds(30, 270, 64, 50);
 
+        jLabel4.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(170, 0, 255));
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/password.png"))); // NOI18N
+        jLabel4.setText("Connected ");
+        jLabel4.setToolTipText("");
         kGradientPanel1.add(jLabel4);
-        jLabel4.setBounds(50, 320, 26, 30);
+        jLabel4.setBounds(0, 320, 160, 30);
 
-        TFusername.setToolTipText("");
-        kGradientPanel1.add(TFusername);
-        TFusername.setBounds(90, 275, 150, 30);
-        kGradientPanel1.add(TFpassword);
-        TFpassword.setBounds(90, 320, 150, 30);
+        jLabel7.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(170, 0, 255));
+        jLabel7.setText("Total Clients");
+        kGradientPanel1.add(jLabel7);
+        jLabel7.setBounds(40, 370, 90, 15);
+
+        LabelStatus.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        LabelStatus.setForeground(new java.awt.Color(249, 43, 43));
+        LabelStatus.setText("Closed");
+        kGradientPanel1.add(LabelStatus);
+        LabelStatus.setBounds(150, 290, 90, 15);
+        LabelStatus.setText("Running");
+
+        LabelConnected.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        LabelConnected.setForeground(new java.awt.Color(170, 0, 255));
+        LabelConnected.setText("None");
+        kGradientPanel1.add(LabelConnected);
+        LabelConnected.setBounds(150, 330, 36, 15);
+
+        jLabel10.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(170, 0, 255));
+        jLabel10.setText("3");
+        kGradientPanel1.add(jLabel10);
+        jLabel10.setBounds(150, 370, 9, 15);
 
         jLabel5.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
         jLabel5.setForeground(java.awt.Color.white);
@@ -85,19 +106,6 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         kGradientPanel1.add(jLabel5);
         jLabel5.setBounds(60, 400, 100, 30);
-
-        BtnLogin.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
-        BtnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/login.png"))); // NOI18N
-        BtnLogin.setBorder(null);
-        BtnLogin.setContentAreaFilled(false);
-        BtnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        BtnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnLoginActionPerformed(evt);
-            }
-        });
-        kGradientPanel1.add(BtnLogin);
-        BtnLogin.setBounds(70, 380, 140, 70);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/curve.png"))); // NOI18N
@@ -113,24 +121,10 @@ public class LoginForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLoginActionPerformed
-        command = "login";
-        username = TFusername.getText().toString();
-        password = TFpassword.getText().toString();
-        try {
-            Client client = new Client(username,password,command);
-//            Server serverCommand = new Server(command);
-//            Server serverUserInfo = new Server(username,password);
-            client.doTask(command);
-        } catch (IOException ex) {
-            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_BtnLoginActionPerformed
-
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -144,35 +138,36 @@ public class LoginForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerWelcomeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerWelcomeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerWelcomeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ServerWelcomeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
-        /* Create and diplay the form */
-        //Client client = new Client(username,password,command);
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LoginForm().setVisible(true);
+                new ServerWelcomeForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtnLogin;
-    private javax.swing.JPasswordField TFpassword;
-    private javax.swing.JTextField TFusername;
+    private javax.swing.JLabel LabelConnected;
+    public javax.swing.JLabel LabelStatus;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private keeptoo.KGradientPanel kGradientPanel1;
+    private javax.swing.JLabel jLabel7;
+    public keeptoo.KGradientPanel kGradientPanel1;
     // End of variables declaration//GEN-END:variables
 }
