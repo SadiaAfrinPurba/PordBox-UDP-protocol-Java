@@ -23,6 +23,7 @@ import java.net.UnknownHostException;
     public static final int FILE_LENGTH = 1024;
     public static byte [] receiveByte = new byte[1024];
     public static byte[] sendByte = new byte[1024];
+    public static LoginForm loginForm;
     public Client(){
         
     }
@@ -37,18 +38,15 @@ import java.net.UnknownHostException;
             String message = username + " " + password + " "+command;
             boolean isSent = sendPacket(message);
            
-            if(command.contains("login")){
+            if(command.contains("login") && isSent){
+                String responseFromServer = receivePacket();
+                if(responseFromServer.equals("Successfully login")){
+                    loginForm.setVisible(false);
+                    
+                }
+             
                
-            
-               if(isSent){
-                //Server server = new Server(username,password);
-//                //server.login(username,password);
-                System.out.println("inside doTask"+username + command);
-                
-            }
-                else{
-                //new Server().errorMessage("Something went wrong! Try again");
-            }
+
            
        }
     }
@@ -67,9 +65,15 @@ import java.net.UnknownHostException;
 //			System.out.println(response);
 //			clientUDPSocket.close();
     }
+    public static String receivePacket(){
+        DatagramPacket receiveDatagramPacket = new DatagramPacket(receiveByte, receiveByte.length);
+	String response = new String(receiveDatagramPacket.getData());
+        return response;
+    }
   
     public static void main(String[] args) throws UnknownHostException, SocketException, IOException,NullPointerException{
-        LoginForm loginForm = new LoginForm();
+        loginForm = new LoginForm();
+        loginForm.setDefaultCloseOperation(loginForm.DISPOSE_ON_CLOSE);
         loginForm.setVisible(true);
         
         

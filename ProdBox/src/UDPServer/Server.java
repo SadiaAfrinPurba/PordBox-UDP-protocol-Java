@@ -5,10 +5,12 @@
  */
 package UDPServer;
 
+import UDPClient.LoginForm;
 import java.awt.Color;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,66 +30,62 @@ public class Server {
     public static final String DOWNLOAD = "download";
     public static final String UPLOAD = "upload";
     public static String username, password,command = "";
-    
-    static byte[] sendData = new byte[FILE_LENGTH];
+    public static InetAddress ipAddress;
+    public static DatagramSocket serverSocket;
     public static int hasClient = 0;
-    //constructor
-//    public Server(String username,String password){
-//        this.username = username;
-//        this.password = password;
-//        System.out.println("inside server cons "+command);
-//    }
-//     public Server(String command){
-//     
-//        this.command = command;
-//        System.out.println("inside server "+command);
-//    }
+
     
     public static String receivePacket() throws SocketException, IOException{
         byte[] receiveData = new byte[FILE_LENGTH];
-        DatagramSocket serverSocket = new DatagramSocket(PORT);
+        serverSocket= new DatagramSocket(PORT);
         DatagramPacket receiveDatagramPacket = new DatagramPacket(receiveData, receiveData.length);
         serverSocket.receive(receiveDatagramPacket);
+        ipAddress = receiveDatagramPacket.getAddress();
         command = new String(receiveDatagramPacket.getData());
         System.out.println("inside recieve "+command);
         return command;
     }
+    public static void sendPacket(String sendToClient) throws SocketException, IOException{
+        byte[] sendData = new byte[FILE_LENGTH];
+        sendData = sendToClient.getBytes();
+        DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, ipAddress, PORT);
+	serverSocket.send(sendDatagramPacket);
+        System.out.println("inside send"+sendToClient);
+        
+    }
     
-    public static void login(String username, String password){
+    public static String login(String username, String password){
 
 
          User userOne = new User("purba","123");
          User userTwo = new User("sadia","afrin");
          User userThree = new User("afrin","123sadia");
-       
+         String response;
          if(username.equals(userOne.getUsername()) && password.equals(userOne.getPassword())){
              JOptionPane.showMessageDialog(null,"Login Successful!!");
-             hasClient = 1;
-             System.out.println("hellp");
-             ServerWelcomeForm form = new ServerWelcomeForm();
-             form.LabelStatus.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
-
-              form.LabelStatus.setText("Running");
-              form.LabelStatus.setForeground(Color.green);
-              form.kGradientPanel1.add(form.LabelStatus);
-              form.LabelStatus.setBounds(150, 290, 90, 15);
+             response = "Successfully login"; 
+//             HomeDirectoryForm homeDir = new HomeDirectoryForm();
+//             homeDir.setVisible(true);
+            
               
          }
          else if(username.equals(userTwo.getUsername()) && password.equals(userTwo.getPassword())){
              JOptionPane.showMessageDialog(null,"Login Successful!!");
-             hasClient = 1;
+             response = "Successfully login";
              
          }
          else if(username.equals(userThree.getUsername()) && password.equals(userThree.getPassword())){
              JOptionPane.showMessageDialog(null,"Login Successful!!");
-             hasClient = 1;
+             response = "Successfully login";
              
          }
          else{
              errorMessage("Invalid login.User is not avaiable in the server!");
-             hasClient = 0;
+             response = "Error";
 
          }
+         
+         return response;
          
          
     }
@@ -102,7 +100,7 @@ public class Server {
         
         try{
 
-             //task
+            
             String message = receivePacket();
             System.out.println("inside main "+ message);
             String[] words=message.split(" ");
@@ -113,8 +111,11 @@ public class Server {
             
             
              if(message.contains("login")){
+                 String sendToClient;
                  System.out.println("inside main-if "+ username);
-                 login(username,password);
+                 sendToClient=login(username,password);
+                 System.out.println(sendToClient);
+                 sendPacket(sendToClient);
                  
              }
 //             else if(command.contains(NEW_FOLDER)){

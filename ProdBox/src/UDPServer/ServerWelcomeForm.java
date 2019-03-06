@@ -19,6 +19,7 @@ public class ServerWelcomeForm extends javax.swing.JFrame {
     /**
      * Creates new form LoginForm
      */
+    
     public ServerWelcomeForm() {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -85,7 +86,6 @@ public class ServerWelcomeForm extends javax.swing.JFrame {
         LabelStatus.setText("Closed");
         kGradientPanel1.add(LabelStatus);
         LabelStatus.setBounds(150, 290, 90, 15);
-        LabelStatus.setText("Running");
 
         LabelConnected.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
         LabelConnected.setForeground(new java.awt.Color(170, 0, 255));
