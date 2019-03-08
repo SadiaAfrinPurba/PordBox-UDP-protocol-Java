@@ -5,6 +5,7 @@
  */
 package UDPServer;
 
+import UDPClient.HomeDirectoryForm;
 import UDPClient.*;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -43,9 +44,10 @@ public class ServerWelcomeForm extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         LabelStatus = new javax.swing.JLabel();
+        BtnEnter = new javax.swing.JLabel();
         LabelConnected = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -56,7 +58,7 @@ public class ServerWelcomeForm extends javax.swing.JFrame {
 
         jLabel6.setFont(new java.awt.Font("Cantarell", 1, 36)); // NOI18N
         jLabel6.setForeground(java.awt.Color.white);
-        jLabel6.setText("   ProdBox");
+        jLabel6.setText("   PordBox");
         kGradientPanel1.add(jLabel6);
         jLabel6.setBounds(30, 80, 180, 40);
 
@@ -87,25 +89,34 @@ public class ServerWelcomeForm extends javax.swing.JFrame {
         kGradientPanel1.add(LabelStatus);
         LabelStatus.setBounds(150, 290, 90, 15);
 
+        BtnEnter.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
+        BtnEnter.setForeground(java.awt.Color.white);
+        BtnEnter.setText("Enter");
+        kGradientPanel1.add(BtnEnter);
+        BtnEnter.setBounds(90, 430, 60, 19);
+
         LabelConnected.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
         LabelConnected.setForeground(new java.awt.Color(170, 0, 255));
         LabelConnected.setText("None");
         kGradientPanel1.add(LabelConnected);
         LabelConnected.setBounds(150, 330, 36, 15);
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/login.png"))); // NOI18N
+        jButton1.setBorder(null);
+        jButton1.setContentAreaFilled(false);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        kGradientPanel1.add(jButton1);
+        jButton1.setBounds(70, 420, 110, 40);
+
         jLabel10.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(170, 0, 255));
         jLabel10.setText("3");
         kGradientPanel1.add(jLabel10);
         jLabel10.setBounds(150, 370, 9, 15);
-
-        jLabel5.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
-        jLabel5.setForeground(java.awt.Color.white);
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel5.setText("Login");
-        jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        kGradientPanel1.add(jLabel5);
-        jLabel5.setBounds(60, 400, 100, 30);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/curve.png"))); // NOI18N
@@ -120,6 +131,15 @@ public class ServerWelcomeForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        HomeDirectoryForm home = new HomeDirectoryForm();
+        home.setVisible(true);
+        this.dispose();
+        
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -158,14 +178,15 @@ public class ServerWelcomeForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel LabelConnected;
+    private javax.swing.JLabel BtnEnter;
+    public javax.swing.JLabel LabelConnected;
     public javax.swing.JLabel LabelStatus;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton1;
+    public javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     public keeptoo.KGradientPanel kGradientPanel1;

@@ -16,20 +16,17 @@ import java.util.logging.Logger;
  *
  * @author afrin
  */
-public class LoginForm extends javax.swing.JFrame {
+public class ClientWelcomeForm extends javax.swing.JFrame {
 
-    /**
-     * Creates new form LoginForm
-     */
     
-    public static String username, password,command;
-    
-    public LoginForm() {
-        initComponents();
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+  
+
+      public ClientWelcomeForm() {
+      initComponents();
+       Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2 , dim.height / 2 - this.getSize().height / 2);
-//        this.setSize(262,480);
-    }   
+        this.setSize(262,480);
+      }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,12 +39,12 @@ public class LoginForm extends javax.swing.JFrame {
 
         kGradientPanel1 = new keeptoo.KGradientPanel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        TFusername = new javax.swing.JTextField();
-        TFpassword = new javax.swing.JPasswordField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        BtnLogin = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -62,21 +59,30 @@ public class LoginForm extends javax.swing.JFrame {
         kGradientPanel1.add(jLabel6);
         jLabel6.setBounds(30, 80, 180, 40);
 
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/username.png"))); // NOI18N
-        kGradientPanel1.add(jLabel3);
-        jLabel3.setBounds(30, 270, 64, 50);
-
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/password.png"))); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(170, 0, 255));
+        jLabel4.setText("Username         Password");
         kGradientPanel1.add(jLabel4);
-        jLabel4.setBounds(50, 320, 26, 30);
+        jLabel4.setBounds(40, 320, 180, 15);
 
-        TFusername.setToolTipText("");
-        kGradientPanel1.add(TFusername);
-        TFusername.setBounds(90, 275, 150, 30);
-        kGradientPanel1.add(TFpassword);
-        TFpassword.setBounds(90, 320, 150, 30);
+        jLabel7.setText("User1                   123");
+        kGradientPanel1.add(jLabel7);
+        jLabel7.setBounds(40, 350, 170, 15);
+
+        jLabel8.setText("User2                 afrin");
+        kGradientPanel1.add(jLabel8);
+        jLabel8.setBounds(40, 380, 160, 15);
+
+        jLabel9.setText("User3              123sadia");
+        kGradientPanel1.add(jLabel9);
+        jLabel9.setBounds(40, 410, 153, 15);
+
+        jLabel3.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(170, 0, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Welcome");
+        kGradientPanel1.add(jLabel3);
+        jLabel3.setBounds(30, 240, 180, 50);
 
         jLabel5.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
         jLabel5.setForeground(java.awt.Color.white);
@@ -85,24 +91,6 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         kGradientPanel1.add(jLabel5);
         jLabel5.setBounds(60, 400, 100, 30);
-
-        BtnLogin.setFont(new java.awt.Font("Cantarell", 1, 18)); // NOI18N
-        BtnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/login.png"))); // NOI18N
-        BtnLogin.setBorder(null);
-        BtnLogin.setContentAreaFilled(false);
-        BtnLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        BtnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BtnLoginMouseClicked(evt);
-            }
-        });
-        BtnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnLoginActionPerformed(evt);
-            }
-        });
-        kGradientPanel1.add(BtnLogin);
-        BtnLogin.setBounds(70, 380, 140, 70);
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/curve.png"))); // NOI18N
@@ -117,27 +105,6 @@ public class LoginForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void BtnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLoginActionPerformed
-       
-    }//GEN-LAST:event_BtnLoginActionPerformed
-
-    private void BtnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnLoginMouseClicked
-        // TODO add your handling code here:
-        
-        username = TFusername.getText().toString();
-        password = TFpassword.getText().toString();
-        String loginMessage = username + " " + password + " login";
-        try {
-            Client client = new Client();
-            client.clientLogin(loginMessage);
-            
-            
- 
-        } catch (IOException ex) {
-            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_BtnLoginMouseClicked
 
     /**
      * @param args the command line arguments
@@ -156,35 +123,36 @@ public class LoginForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientWelcomeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientWelcomeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientWelcomeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LoginForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ClientWelcomeForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and diplay the form */
         //Client client = new Client(username,password,command);
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LoginForm().setVisible(true);
+                new ClientWelcomeForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtnLogin;
-    public javax.swing.JPasswordField TFpassword;
-    public javax.swing.JTextField TFusername;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private keeptoo.KGradientPanel kGradientPanel1;
     // End of variables declaration//GEN-END:variables
 }

@@ -7,13 +7,19 @@ package UDPServer;
 
 import UDPClient.LoginForm;
 import java.awt.Color;
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -21,7 +27,7 @@ import javax.swing.JPanel;
  *
  * @author afrin
  */
-public class Server {
+public class Server extends Thread{
     public static final int PORT = 9877;
     public static final int FILE_LENGTH = 1024;
     public static final String LOGIN = "login";
@@ -29,119 +35,194 @@ public class Server {
     public static final String CHANGE_DIR = "cd";
     public static final String DOWNLOAD = "download";
     public static final String UPLOAD = "upload";
-    public static String username, password,command = "";
-    public static InetAddress ipAddress;
+    public static final String SUCCESS_MESSAGE = "Successful";
+    public static final String ERROR_MESSAGE = "Error";
+    public String username;
+    public InetAddress ipAddress;
+    public int clientPort;
     public static DatagramSocket serverSocket;
-    public static int hasClient = 0;
+    public int hasClient = 0;
+    public DatagramPacket sendDatagramPacket;
+    public DatagramPacket receiveDatagramPacket;
 
-    
-    public static String receivePacket() throws SocketException, IOException{
-        byte[] receiveData = new byte[FILE_LENGTH];
-        serverSocket= new DatagramSocket(PORT);
-        DatagramPacket receiveDatagramPacket = new DatagramPacket(receiveData, receiveData.length);
-        serverSocket.receive(receiveDatagramPacket);
-        ipAddress = receiveDatagramPacket.getAddress();
-        command = new String(receiveDatagramPacket.getData());
-        System.out.println("inside recieve "+command);
-        return command;
-    }
-    public static void sendPacket(String sendToClient) throws SocketException, IOException{
-        byte[] sendData = new byte[FILE_LENGTH];
-        sendData = sendToClient.getBytes();
-        DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, ipAddress, PORT);
-	serverSocket.send(sendDatagramPacket);
-        System.out.println("inside send"+sendToClient);
+
+    public  String receivePacket() throws SocketException, IOException{
+        
+        
+        //serverSocket = new DatagramSocket(PORT);
+        while(true){
+           
+            byte[] receiveData = new byte[FILE_LENGTH];
+            receiveDatagramPacket = new DatagramPacket(receiveData, receiveData.length);
+            serverSocket.receive(receiveDatagramPacket);
+           
+            ipAddress = receiveDatagramPacket.getAddress();
+            clientPort = receiveDatagramPacket.getPort();
+            String command = new String(receiveDatagramPacket.getData());
+            System.out.println("inside recieve "+command);
+            return command;
+        }
         
     }
+    public  void sendPacket(String sendToClient) throws SocketException, IOException{
     
-    public static String login(String username, String password){
+            byte[] sendData = new byte[FILE_LENGTH];
+            sendData = sendToClient.getBytes();
+            sendDatagramPacket = new DatagramPacket(sendData, sendData.length, ipAddress, clientPort);
+	    serverSocket.send(sendDatagramPacket);
+            System.out.println("inside send "+sendToClient);
+//        
+        
+        
+
+        
+    }
+
+    
+    public  boolean login(String username, String password){
 
 
-         User userOne = new User("purba","123");
-         User userTwo = new User("sadia","afrin");
-         User userThree = new User("afrin","123sadia");
-         String response;
+         User userOne = new User("User1","123");
+         User userTwo = new User("User2","afrin");
+         User userThree = new User("User3","123sadia");
+         boolean isSuccess =false;
+         
          if(username.equals(userOne.getUsername()) && password.equals(userOne.getPassword())){
-             JOptionPane.showMessageDialog(null,"Login Successful!!");
-             response = "Successfully login"; 
-//             HomeDirectoryForm homeDir = new HomeDirectoryForm();
-//             homeDir.setVisible(true);
+             onSuccess();
+             isSuccess = true;
             
               
          }
          else if(username.equals(userTwo.getUsername()) && password.equals(userTwo.getPassword())){
-             JOptionPane.showMessageDialog(null,"Login Successful!!");
-             response = "Successfully login";
+             onSuccess();
+             isSuccess = true;
              
          }
          else if(username.equals(userThree.getUsername()) && password.equals(userThree.getPassword())){
-             JOptionPane.showMessageDialog(null,"Login Successful!!");
-             response = "Successfully login";
+             onSuccess();
+              isSuccess = true;
              
          }
          else{
-             errorMessage("Invalid login.User is not avaiable in the server!");
-             response = "Error";
-
+              //errorMessage("Server Error!");
+ 
+              isSuccess = false;
          }
          
-         return response;
+         return isSuccess;
          
          
     }
+    public  void onSuccess(){
+
+             hasClient++;
+             ServerWelcomeForm serverForm = new ServerWelcomeForm();
+             serverForm.LabelStatus.setText("Running..");
+             serverForm.LabelStatus.setForeground(Color.green);
+             serverForm.LabelConnected.setText(String.valueOf(hasClient));
+             serverForm.setVisible(true);
+        
+    }
+    public  boolean createNewFolder(String username,String folderName) throws IOException{
+         
+                boolean response = false;
+               
+                String currentDir = System.getProperty("user.dir").toString();
+      
+                String path = String.join("/", currentDir,folderName); 
+                      
+                File createFolder = new File(folderName.trim());
+
+                if(createFolder.exists()){
+                    JOptionPane.showMessageDialog(null, "Folder already exists", "Rename the folder", JOptionPane.ERROR_MESSAGE);
+                    
+                }
+                else{
+                      boolean success = createFolder.mkdir();
+                      if(success){
+                          response = true;
+                          
+                      }
+                      else{
+                          response = false;
+                      }
+                    
+                }
+
+
+   
+        return response;
+   
+        
+    }
+
     public static void errorMessage(String message){
         final JPanel panel = new JPanel();
         JOptionPane.showMessageDialog(panel, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
-    public static void main(String[] args){
+    public static void main(String[] args) throws SocketException{
         ServerWelcomeForm welcomeForm = new ServerWelcomeForm();
         welcomeForm.setVisible(true);
-        
-        
-        try{
 
-            
-            String message = receivePacket();
-            System.out.println("inside main "+ message);
-            String[] words=message.split(" ");
-            username = words[0];
-            password = words[1];
-            command = words[2];
-            System.out.println("inside word "+ username);
-            
-            
-             if(message.contains("login")){
-                 String sendToClient;
-                 System.out.println("inside main-if "+ username);
-                 sendToClient=login(username,password);
-                 System.out.println(sendToClient);
-                 sendPacket(sendToClient);
-                 
-             }
-//             else if(command.contains(NEW_FOLDER)){
-//                 
-//             }
-//             else if(command.contains(CHANGE_DIR)){
-//                 
-//             }
-//             else if(command.contains(DOWNLOAD)){
-//                 
-//             }
-//             else if(command.contains(UPLOAD)){
-//                 
-//             }
-             else{
-                 errorMessage("Invalid command");
-             }
+         Thread thread = new  Thread(new Server());
+         thread.start();
     
-        }  
-        catch(Exception ex){
-            System.out.println(ex.toString());
+
+
+}
+
+
+    public  void jobs() throws SocketException {
+        serverSocket = new DatagramSocket(PORT);
+        
+        try { 
+               for(int i = 0;i<=100;i++){
+                   
+               
+               String command = receivePacket();
+               System.out.println("Inside run " + command);
+               if(command.contains(LOGIN)){
+                       String[] commands = command.split(" ");
+                       username = commands[0];
+                       String password = commands[1];
+                       String job = commands[2];
+                       boolean success = login(username,password);
+                       System.out.println("inside job-login"+username+success);
+                       if(success){
+                           sendPacket(SUCCESS_MESSAGE);
+                        }
+                    }
+               else if(command.contains(NEW_FOLDER)){
+                    System.out.println("inside job-folder"+command);
+                    String[] fName = command.split(" ");
+                    String folderName = fName[1];
+                    boolean success = createNewFolder(username, folderName);
+                    System.out.println("inside job-folder"+folderName+success);
+                    if(success){
+                        sendPacket(SUCCESS_MESSAGE);
+                    }
+                }
+              
+             }
+            } 
+        catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+             
+        
         }
 
-}
+    public void run(){
+        try {
+            jobs();
+        } catch (SocketException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+   
 
 }
+
 
 class User{
     private String username;
