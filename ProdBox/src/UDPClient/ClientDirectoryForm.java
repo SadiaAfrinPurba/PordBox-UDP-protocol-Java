@@ -12,15 +12,18 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileSystemView;
 
 
 /**
@@ -53,6 +56,11 @@ public class ClientDirectoryForm extends javax.swing.JFrame {
         btnName.setVisible(true);
         btnName.setText(folderName);
     }
+    public void setDirectory(JButton btnName){
+        //ClientDirectoryForm clientDir = new ClientDirectoryForm();
+        labelDir.setText("home/" + btnName.getText());
+        //clientDir.setVisible(true);
+    }
 
 
     /**
@@ -78,6 +86,7 @@ public class ClientDirectoryForm extends javax.swing.JFrame {
         btnFolder3 = new javax.swing.JButton();
         btnFolder4 = new javax.swing.JButton();
         btnFolder5 = new javax.swing.JButton();
+        labelDir = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -179,6 +188,11 @@ public class ClientDirectoryForm extends javax.swing.JFrame {
         btnFolder1.setContentAreaFilled(false);
         btnFolder1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFolder1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnFolder1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFolder1ActionPerformed(evt);
+            }
+        });
 
         btnFolder2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-medium.png"))); // NOI18N
         btnFolder2.setBorder(null);
@@ -204,27 +218,37 @@ public class ClientDirectoryForm extends javax.swing.JFrame {
         btnFolder5.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFolder5.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
+        labelDir.setFont(new java.awt.Font("Cantarell", 1, 14)); // NOI18N
+        labelDir.setForeground(new java.awt.Color(170, 0, 255));
+        labelDir.setText("home");
+
         javax.swing.GroupLayout panelFolderSpaceLayout = new javax.swing.GroupLayout(panelFolderSpace);
         panelFolderSpace.setLayout(panelFolderSpaceLayout);
         panelFolderSpaceLayout.setHorizontalGroup(
             panelFolderSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFolderSpaceLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(btnFolder1)
-                .addGap(66, 66, 66)
-                .addComponent(btnFolder2)
-                .addGap(53, 53, 53)
-                .addComponent(btnFolder3)
-                .addGap(43, 43, 43)
-                .addComponent(btnFolder4)
-                .addGap(45, 45, 45)
-                .addComponent(btnFolder5)
+                .addGroup(panelFolderSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelFolderSpaceLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(btnFolder1)
+                        .addGap(66, 66, 66)
+                        .addComponent(btnFolder2)
+                        .addGap(53, 53, 53)
+                        .addComponent(btnFolder3)
+                        .addGap(43, 43, 43)
+                        .addComponent(btnFolder4)
+                        .addGap(45, 45, 45)
+                        .addComponent(btnFolder5))
+                    .addGroup(panelFolderSpaceLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(labelDir, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelFolderSpaceLayout.setVerticalGroup(
             panelFolderSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelFolderSpaceLayout.createSequentialGroup()
-                .addGap(58, 58, 58)
+                .addComponent(labelDir)
+                .addGap(43, 43, 43)
                 .addGroup(panelFolderSpaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnFolder4, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
                     .addComponent(btnFolder1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -301,7 +325,7 @@ public class ClientDirectoryForm extends javax.swing.JFrame {
          Client client = new Client();
          //Server server = new Server();
         try {
-            client.sendPacket(command);
+            //client.sendPacket(command);
            
             client.clientNewFolder(command);
         } catch (Exception ex) {
@@ -318,6 +342,23 @@ public class ClientDirectoryForm extends javax.swing.JFrame {
 
     private void labelUploadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelUploadMouseClicked
         // TODO add your handling code here:
+        String currentDir =  System.getProperty("user.dir");
+        String chooserFilePath = String.join("/", ".","userProfile",loginForm.username);
+        JFileChooser chooser = new JFileChooser(FileSystemView.getFileSystemView());
+        //chooser.setCurrentDirectory(new File(((FileSystemView.getFileSystemView()));
+        //chooser.
+        //chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+       if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+            String command = "upload " + chooser.getSelectedFile();
+            //JOptionPane.showMessageDialog(null, command);
+            Client client = new Client();
+            try {
+                client.clientUploadFile(command);
+            } catch (IOException ex) {
+                Logger.getLogger(ClientDirectoryForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+      }
+        
     }//GEN-LAST:event_labelUploadMouseClicked
 
     private void labelUsernameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelUsernameMouseClicked
@@ -333,6 +374,10 @@ public class ClientDirectoryForm extends javax.swing.JFrame {
            
        
     }//GEN-LAST:event_labelUsernameMouseClicked
+
+    private void btnFolder1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFolder1ActionPerformed
+        setDirectory(btnFolder1);
+    }//GEN-LAST:event_btnFolder1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -381,6 +426,7 @@ public class ClientDirectoryForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private keeptoo.KGradientPanel kGradientPanel1;
     public javax.swing.JLabel labelCreateFolder;
+    private javax.swing.JLabel labelDir;
     private javax.swing.JLabel labelDownload;
     private javax.swing.JLabel labelUpload;
     private javax.swing.JLabel labelUsername;

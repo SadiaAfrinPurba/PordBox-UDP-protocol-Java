@@ -6,6 +6,7 @@
 package UDPClient;
 
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -40,10 +41,12 @@ import javax.swing.JOptionPane;
     public  void sendPacket(String command) throws IOException{
         clientUDPSocket = new DatagramSocket();
         InetAddress IPAddress = InetAddress.getByName("localhost");
-
+        
         byte[] sendByte = new byte[1024];
-
-	sendByte = command.getBytes();
+      
+            
+            sendByte = command.getBytes();
+        
 	DatagramPacket sendDatagramPacket = new DatagramPacket(sendByte, sendByte.length, IPAddress,PORT);
 	clientUDPSocket.send(sendDatagramPacket);
         
@@ -79,7 +82,7 @@ import javax.swing.JOptionPane;
                
                 isLogin = true;
                 if(isLogin){
-                    //sendPacket(command);
+                    sendPacket(command);
                     String responseFromServer = receivePacket();
                     if(responseFromServer.trim().equals(SUCCESS_MESSAGE)){
                           JOptionPane.showMessageDialog(null,"New folder create.");
@@ -99,7 +102,19 @@ import javax.swing.JOptionPane;
                 
                 
     }
-      public  void clientChangeFolder(String command) throws IOException{
+      public  void clientUploadFile(String command) throws IOException{
+                    
+                    
+                    sendPacket(command);
+                    String responseFromServer = receivePacket();
+                    if(responseFromServer.trim().equals(SUCCESS_MESSAGE)){
+                         JOptionPane.showMessageDialog(null,"Upload Successfully");
+
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Try again", "Error", JOptionPane.ERROR_MESSAGE);
+
+                    }
 
             
     }

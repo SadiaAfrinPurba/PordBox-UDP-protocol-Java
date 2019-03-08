@@ -8,6 +8,9 @@ package UDPServer;
 import UDPClient.LoginForm;
 import java.awt.Color;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -104,7 +107,6 @@ public class Server extends Thread{
              
          }
          else{
-              //errorMessage("Server Error!");
  
               isSuccess = false;
          }
@@ -129,16 +131,16 @@ public class Server extends Thread{
                
                 String currentDir = System.getProperty("user.dir").toString();
       
-                String path = String.join("/", currentDir,folderName); 
-                      
-                File createFolder = new File(folderName.trim());
+                String path = String.join("/",currentDir,"userProfile",username,folderName); 
+                System.out.println(path);
+                File createFolder = new File(path.trim());
 
                 if(createFolder.exists()){
                     JOptionPane.showMessageDialog(null, "Folder already exists", "Rename the folder", JOptionPane.ERROR_MESSAGE);
                     
                 }
                 else{
-                      boolean success = createFolder.mkdir();
+                      boolean success = createFolder.mkdirs();
                       if(success){
                           response = true;
                           
@@ -154,6 +156,31 @@ public class Server extends Thread{
         return response;
    
         
+    }
+    
+    public boolean uploadFile(String username,String command) throws FileNotFoundException, IOException{
+         boolean response;
+         String[] commands = command.split(" ");
+         String fileDir = commands[1];
+         String[] words = fileDir.split("/");
+         String fileName = words[words.length - 1];
+         FileInputStream readFile = new FileInputStream(fileDir.trim());
+         int index = 0;
+         byte[] fileByte = new byte[1024];
+         while(readFile.available()!=0){
+                 fileByte[index]=(byte)readFile.read();
+                 index++;
+         }
+         String currentDir = System.getProperty("user.dir");
+         String path = String.join("/",currentDir,"userProfile",username,fileName);
+         FileOutputStream writeFile = new FileOutputStream(path.trim());
+         writeFile.write(fileByte);
+         
+        readFile.close();
+        writeFile.close();
+        response = true;
+         
+        return response;
     }
 
     public static void errorMessage(String message){
@@ -202,6 +229,12 @@ public class Server extends Thread{
                         sendPacket(SUCCESS_MESSAGE);
                     }
                 }
+               else if(command.contains(UPLOAD)){
+                   boolean success = uploadFile(username,command);
+                   if(success){
+                       sendPacket(SUCCESS_MESSAGE);
+                   }
+               }
               
              }
             } 
