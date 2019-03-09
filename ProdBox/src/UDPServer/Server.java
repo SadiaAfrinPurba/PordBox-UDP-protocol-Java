@@ -5,7 +5,7 @@
  */
 package UDPServer;
 
-import UDPClient.LoginForm;
+
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,11 +16,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -52,7 +47,7 @@ public class Server extends Thread{
     public  String receivePacket() throws SocketException, IOException{
         
         
-        //serverSocket = new DatagramSocket(PORT);
+        
         while(true){
            
             byte[] receiveData = new byte[FILE_LENGTH];
@@ -136,8 +131,11 @@ public class Server extends Thread{
                 File createFolder = new File(path.trim());
 
                 if(createFolder.exists()){
-                    JOptionPane.showMessageDialog(null, "Folder already exists", "Rename the folder", JOptionPane.ERROR_MESSAGE);
-                    
+                    JOptionPane.showMessageDialog(null, "Folder already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+                    response = false;
+                }
+                else if(folderName.trim().equals(" ") || folderName.trim().contains(" ")){
+                    response = false;
                 }
                 else{
                       boolean success = createFolder.mkdirs();
@@ -161,25 +159,54 @@ public class Server extends Thread{
     public boolean uploadFile(String username,String command) throws FileNotFoundException, IOException{
          boolean response;
          String[] commands = command.split(" ");
-         String fileDir = commands[1];
-         String[] words = fileDir.split("/");
+         String readFileDir = commands[1];
+         String[] words = readFileDir.split("/");
          String fileName = words[words.length - 1];
-         FileInputStream readFile = new FileInputStream(fileDir.trim());
+         FileInputStream readFile = new FileInputStream(readFileDir.trim());
          int index = 0;
-         byte[] fileByte = new byte[1024];
+         byte[] fileByte = new byte[FILE_LENGTH];
          while(readFile.available()!=0){
                  fileByte[index]=(byte)readFile.read();
                  index++;
          }
          String currentDir = System.getProperty("user.dir");
-         String path = String.join("/",currentDir,"userProfile",username,fileName);
-         FileOutputStream writeFile = new FileOutputStream(path.trim());
+         String writeFileDir = String.join("/",currentDir,"userProfile",username,fileName);
+         FileOutputStream writeFile = new FileOutputStream(writeFileDir.trim());
          writeFile.write(fileByte);
          
         readFile.close();
         writeFile.close();
         response = true;
          
+        return response;
+    }
+    public boolean downloadFile(String username,String command) throws FileNotFoundException, IOException{
+        boolean response;
+        String[] words = command.split(" ");
+        String fileName = words[1];
+        String currentDir = System.getProperty("user.dir");
+        String readFileDir = String.join("/",currentDir,"userProfile",username,fileName);
+        
+        FileInputStream readFile = new FileInputStream(readFileDir.trim());
+        
+        int index = 0;
+        
+        byte[] fileByte = new byte[FILE_LENGTH];
+        while(readFile.available()!=0){
+                 fileByte[index]=(byte)readFile.read();
+                 index++;
+        }
+        
+       
+        FileOutputStream writeFile = new FileOutputStream(fileName.trim());
+       
+        //Download the file in current directory
+        writeFile.write(fileByte);
+        
+        readFile.close();
+        writeFile.close();
+        
+        response = true;
         return response;
     }
 
@@ -203,7 +230,7 @@ public class Server extends Thread{
         serverSocket = new DatagramSocket(PORT);
         
         try { 
-               for(int i = 0;i<=100;i++){
+            for(int i = 0;i<=100;i++){
                    
                
                String command = receivePacket();
@@ -218,6 +245,9 @@ public class Server extends Thread{
                        if(success){
                            sendPacket(SUCCESS_MESSAGE);
                         }
+                       else{
+                           sendPacket(ERROR_MESSAGE);
+                       }
                     }
                else if(command.contains(NEW_FOLDER)){
                     System.out.println("inside job-folder"+command);
@@ -228,12 +258,27 @@ public class Server extends Thread{
                     if(success){
                         sendPacket(SUCCESS_MESSAGE);
                     }
+                    else{
+                        sendPacket(ERROR_MESSAGE);
+                    }
                 }
                else if(command.contains(UPLOAD)){
                    boolean success = uploadFile(username,command);
                    if(success){
                        sendPacket(SUCCESS_MESSAGE);
                    }
+                   else{
+                        sendPacket(ERROR_MESSAGE);
+                    }
+               }
+               else if(command.contains(DOWNLOAD)){
+                   boolean success = downloadFile(username,command);
+                   if(success){
+                       sendPacket(SUCCESS_MESSAGE);
+                   }
+                   else{
+                        sendPacket(ERROR_MESSAGE);
+                    }
                }
               
              }

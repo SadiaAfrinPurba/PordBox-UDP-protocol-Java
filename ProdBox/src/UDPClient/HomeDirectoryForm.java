@@ -56,6 +56,7 @@ public class HomeDirectoryForm extends javax.swing.JFrame {
         LabelUserSadia = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("PordBox");
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/box.png"))); // NOI18N
@@ -94,7 +95,7 @@ public class HomeDirectoryForm extends javax.swing.JFrame {
         LabelUserPurba.setFont(new java.awt.Font("Cantarell", 1, 24)); // NOI18N
         LabelUserPurba.setForeground(new java.awt.Color(170, 0, 255));
         LabelUserPurba.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelUserPurba.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-big.png"))); // NOI18N
+        LabelUserPurba.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-medium.png"))); // NOI18N
         LabelUserPurba.setText("User1");
         LabelUserPurba.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         LabelUserPurba.setVerifyInputWhenFocusTarget(false);
@@ -108,7 +109,7 @@ public class HomeDirectoryForm extends javax.swing.JFrame {
         LabelUserAfrin.setFont(new java.awt.Font("Cantarell", 1, 24)); // NOI18N
         LabelUserAfrin.setForeground(new java.awt.Color(170, 0, 255));
         LabelUserAfrin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelUserAfrin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-big.png"))); // NOI18N
+        LabelUserAfrin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-medium.png"))); // NOI18N
         LabelUserAfrin.setText("User2");
         LabelUserAfrin.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         LabelUserAfrin.setVerifyInputWhenFocusTarget(false);
@@ -122,7 +123,7 @@ public class HomeDirectoryForm extends javax.swing.JFrame {
         LabelUserSadia.setFont(new java.awt.Font("Cantarell", 1, 24)); // NOI18N
         LabelUserSadia.setForeground(new java.awt.Color(170, 0, 255));
         LabelUserSadia.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        LabelUserSadia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-big.png"))); // NOI18N
+        LabelUserSadia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-medium.png"))); // NOI18N
         LabelUserSadia.setText("User3");
         LabelUserSadia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         LabelUserSadia.setVerifyInputWhenFocusTarget(false);
@@ -140,13 +141,13 @@ public class HomeDirectoryForm extends javax.swing.JFrame {
             .addComponent(kGradientPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(86, 86, 86)
+                .addGap(66, 66, 66)
                 .addComponent(LabelUserPurba)
                 .addGap(84, 84, 84)
                 .addComponent(LabelUserAfrin)
                 .addGap(67, 67, 67)
                 .addComponent(LabelUserSadia)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

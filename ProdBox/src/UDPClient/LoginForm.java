@@ -52,6 +52,7 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("PordBox - Login");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         kGradientPanel1.setLayout(null);
@@ -131,7 +132,7 @@ public class LoginForm extends javax.swing.JFrame {
         try {
             Client client = new Client();
             client.clientLogin(loginMessage);
-            
+            this.dispose();
             
  
         } catch (IOException ex) {

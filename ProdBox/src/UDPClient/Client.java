@@ -102,17 +102,22 @@ import javax.swing.JOptionPane;
                 
                 
     }
-      public  void clientUploadFile(String command) throws IOException{
+      public  void clientUploadDownloadFile(String command) throws IOException{
                     
                     
                     sendPacket(command);
                     String responseFromServer = receivePacket();
                     if(responseFromServer.trim().equals(SUCCESS_MESSAGE)){
-                         JOptionPane.showMessageDialog(null,"Upload Successfully");
+                         if(command.contains("upload")){
+                             JOptionPane.showMessageDialog(null,"Upload Successfully");
+                         }
+                         else{
+                             JOptionPane.showMessageDialog(null,"Download Successfully");
+                         }
 
                     }
                     else{
-                        JOptionPane.showMessageDialog(null, "Try again", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Try again!", "Error", JOptionPane.ERROR_MESSAGE);
 
                     }
 
